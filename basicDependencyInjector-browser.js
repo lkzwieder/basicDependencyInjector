@@ -11,7 +11,7 @@ var $req;
       deps.forEach(function(dep) {
          names.push(dep.name);
          if(!utils.inObject(dep.name, _store)) {
-            dynamics.push(_getContent(dep.name, dep.url));
+            dynamics.push(_storeDeps(dep.name, dep.url));
          }
       });
       new BasicDeferred().when.apply(null, dynamics)
@@ -39,19 +39,14 @@ var $req;
       return script;
    };
 
-   var _getContent = function(name, url, getter) {
-      getter = getter || windowDiffGetter;
-      return getter(name, url); // return promise
-   };
-
-   var windowDiffGetter = function(name, url) {
+   var _storeDeps = function(name, url) {
       var deferred = new BasicDeferred();
       var script = _createScript();
       script.src = url;
       var prevWindow = utils.shallowClone(w);
       script.addEventListener('load', function(e) {
          var node = e.currentTarget;
-         var names = _windowDiff(prevWindow, w, name);
+         var names = _windowDiffStore(prevWindow, w, name);
          if(!utils.isEmptyArray(names)) {
             names.forEach(function(n) {
                delete w[n];
@@ -69,7 +64,7 @@ var $req;
       return deferred.promise();
    };
 
-   var _windowDiff = function(old, current, name) {
+   var _windowDiffStore = function(old, current, name) {
       var res = [];
       current = utils.shallowClone(current);
       for(var i in current) {
