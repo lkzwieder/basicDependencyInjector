@@ -1,6 +1,6 @@
 # Basic Dependency Injector
 Basic dependency injector is RequireJS-like tool, but lighter and faster. Build with simplicity in mind offers
-a true Dependency injection pattern with no need extra <script> tags in the html.
+a true Dependency injection pattern with no need extra script tags in the html.
 The first version is aimed only to load JS but in a near future Basic Dependency Injector would be able to load HTML and
 many more types.
 
