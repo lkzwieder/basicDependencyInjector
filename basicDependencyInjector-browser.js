@@ -16,23 +16,14 @@ var $req;
       });
       new BasicDeferred().when.apply(null, dynamics)
          .then(function() {
-            var args = Array.prototype.slice.call(arguments);
-            args.forEach(function(d) {
-               var content = d.content.replace(/(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg, '');
-               _createScript("var toStore=" + content); // TODO
-               _store[d.name] = w['toStore'];
-               console.log(_store);
-               //delete w['toStore'];
-               //_removeScript();
-            });
             var toSend = [];
             names.forEach(function(name) {
                toSend.push(_store[name]);
             });
-            cb.apply(null, toSend);
+            cb.apply(this, toSend);
          })
-         .fail(function() {
-            console.log(arguments);
+         .fail(function(e) {
+            console.log(e);
          });
    };
 
@@ -40,43 +31,55 @@ var $req;
       _config = config;
    };
 
-   var _createScript = function(content) {
+   var _createScript = function() {
       var script = d.createElement('script');
       script.type = 'text/javascript'; // TODO if HTML?
       script.charset = 'utf-8';
       script.async = true;
-      script.text = content;
-      script.id = "toStore";
-      d.getElementsByTagName('head')[0].appendChild(script);
-      return script.id;
-   };
-
-   var _removeScript = function() {
-      var el = d.getElementById("toStore");
-      el.parentNode.removeChild(el);
+      return script;
    };
 
    var _getContent = function(name, url, getter) {
-      getter = ajaxGetter; // TODO getter || ajaxGetter;
-      return getter(name, url);
+      getter = getter || windowDiffGetter;
+      return getter(name, url); // return promise
    };
 
-   var ajaxGetter = function(name, url) {
+   var windowDiffGetter = function(name, url) {
       var deferred = new BasicDeferred();
-      var request = new XMLHttpRequest();
-      request.onreadystatechange = function() {
-         if(request.readyState == 4 && request.status == 200) {
-            deferred.resolve({name: name, content: request.responseText});
-         } else if(request.readyState == 4 && request.status != 200) {
-            deferred.reject("Error in " + name + ": " + request.status);
+      var script = _createScript();
+      script.src = url;
+      var prevWindow = utils.shallowClone(w);
+      script.addEventListener('load', function(e) {
+         var node = e.currentTarget;
+         var names = _windowDiff(prevWindow, w, name);
+         if(!utils.isEmptyArray(names)) {
+            names.forEach(function(n) {
+               delete w[n];
+            });
+            deferred.resolve();
          }
-      };
-      request.open("GET", url, true);
-      request.send(null);
+         node.parentNode.removeChild(node);
+      });
+      script.addEventListener('error', function(e) {
+         var node = e.currentTarget;
+         node.parentNode.removeChild(node);
+         deferred.reject("Error: " + name + " could not be loaded");
+      });
+      d.getElementsByTagName('head')[0].appendChild(script);
       return deferred.promise();
    };
 
-   var iframeGetter = function() {}; // TODO load via iframe or better, via script requirejs-like
+   var _windowDiff = function(old, current, name) {
+      var res = [];
+      current = utils.shallowClone(current);
+      for(var i in current) {
+         if(!old[i] && !_store[name]) {
+            _store[name] = current[i];
+            res.push(i);
+         }
+      }
+      return res;
+   }
 })(document, window);
 
 var DependencyManager = function(arr, config) {
@@ -190,6 +193,19 @@ var utils = {
          }
       }
       return res;
+   },
+   shallowClone: function(obj) { // bettar than deepClone if your concern is performance
+      var clone = {};
+      for(var i in obj) {
+         clone[i] = obj[i];
+      }
+      return clone;
+   },
+   deepClone: function(obj) {
+      return JSON.parse(JSON.stringify(obj));
+   },
+   anotherClone: function(obj) {
+      return new Object(obj);
    }
 };
 
