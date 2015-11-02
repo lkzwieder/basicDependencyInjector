@@ -6,10 +6,8 @@ var $req;
 
    $req = function(deps, cb) {
       var dynamics = [];
-      var deps = new DependencyManager(deps, _config);
-      var names = [];
-      deps.forEach(function(dep) {
-         names.push(dep.name);
+      var orderedDeps = new DependencyManager(deps, _config);
+      orderedDeps.forEach(function(dep) {
          if(!utils.inObject(dep.name, _store)) {
             dynamics.push(_storeDeps(dep.name, dep.url));
          }
@@ -17,7 +15,7 @@ var $req;
       new BasicDeferred().when.apply(null, dynamics)
          .then(function() {
             var toSend = [];
-            names.forEach(function(name) {
+            deps.forEach(function(name) {
                toSend.push(_store[name]);
             });
             cb.apply(this, toSend);
