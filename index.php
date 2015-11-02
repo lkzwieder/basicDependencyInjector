@@ -15,6 +15,7 @@
         });
         $req([
            'underscore',
+           'jquery'
         ], function($, _) {
             console.log($, _);
         });
