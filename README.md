@@ -12,7 +12,11 @@ $ npm install basic-dependency-injector
 ```
 
 ### Typical use
-```
+$req receive two params, an array of urls or names (if the last one is the case must be a setConfig call previously) and 
+a callback. This callback would be executed right after the load scripts step and the params would be called in the 
+same order of the dependencies array.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,7 +46,3 @@ $ npm install basic-dependency-injector
 </body>
 </html>
 ```
-
-$req receive two params, an array of urls or names (if the last one is the case must be a setConfig call previously) and 
-a callback. This callback would be executed right after the load scripts step and the params would be called in the 
-same order of the dependencies array.
