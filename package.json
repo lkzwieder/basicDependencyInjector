@@ -1,13 +1,13 @@
 {
   "name": "basic-dependency-injector",
-  "version": "0.0.3",
+  "version": "0.0.4 ",
   "description": "RequireJS-like inyector, lighter and faster than requirejs, with no overhead and build with simplicity in mind.",
-  "main": "basicDependencyInjector-browser-min.js",
+  "main": "basicDependencyInjector-browser.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node basicDependencyInjector"
+    "test": "open test/index.html"
   },
   "repository": {
     "type": "git",
