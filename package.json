@@ -1,0 +1,35 @@
+{
+  "name": "basic-dependency-injector",
+  "version": "0.0.1",
+  "description": "RequireJS-like inyector, lighter and faster than requirejs, with no overhead and build with simplicity in mind.",
+  "main": "basicDependencyInjector-browser-min.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node basicDependencyInjector"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lkzwieder/basicDependencyInjector.git"
+  },
+  "keywords": [
+    "dependency",
+    "injection",
+    "require",
+    "define",
+    "requirejs",
+    "$req",
+    "basic",
+    "injector",
+    "inyeccion",
+    "dependencias",
+    "dependencia"
+  ],
+  "author": "Lucas Tettamanti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lkzwieder/basicDependencyInjector/issues"
+  },
+  "homepage": "https://github.com/lkzwieder/basicDependencyInjector"
+}
