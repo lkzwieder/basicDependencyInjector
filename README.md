@@ -33,3 +33,7 @@ $req([
     console.log(_, $);
 });
 ```
+
+### Future stuff
+- Inject HTML, JSON and another.
+- data-main in the script tag in order to use $req automatically with the first script too.
