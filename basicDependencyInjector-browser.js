@@ -1,6 +1,5 @@
 var $req;
 (function(d, w) {
-   "use strict";
    var _config = {};
    var _store = {};
 
@@ -267,7 +266,7 @@ var $req;
             deps.forEach(function(name) {
                toSend.push(_store[name]);
             });
-            cb.apply(this, toSend);
+            if(cb) cb.apply(this, toSend);
          })
          .fail(function(e) {
             console.log(e);
@@ -277,4 +276,15 @@ var $req;
    $req.setConfig = function(config) {
       _config = config;
    };
+
+   var mains = d.getElementsByTagName('script');
+   var len = mains.length;
+   var main;
+   for(var i = len; i--;) {
+      main = mains[i].getAttribute('data-main');
+      if(main) {
+         $req([main]);
+         break;
+      }
+   }
 })(document, window);
