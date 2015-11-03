@@ -1,6 +1,6 @@
 {
   "name": "basic-dependency-injector",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "RequireJS-like inyector, lighter and faster than requirejs, with no overhead and build with simplicity in mind.",
   "main": "basicDependencyInjector-browser.js",
   "directories": {
