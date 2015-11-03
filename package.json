@@ -1,6 +1,6 @@
 {
   "name": "basic-dependency-injector",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "RequireJS-like inyector, lighter and faster than requirejs, with no overhead and build with simplicity in mind.",
   "main": "basicDependencyInjector-browser.js",
   "directories": {
@@ -26,7 +26,13 @@
     "injector",
     "inyeccion",
     "dependencias",
-    "dependencia"
+    "dependencia",
+    "data-main",
+    "main",
+    "single entry point",
+    "single",
+    "entry",
+    "point"
   ],
   "author": "Lucas Tettamanti",
   "license": "ISC",
