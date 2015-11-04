@@ -277,23 +277,27 @@ var req, def;
       };
 
       var dynamics = [];
-      var orderedDeps = new DependencyManager(deps, _config);
-      orderedDeps.forEach(function(dep) {
-         if(!utils.inObject(dep.name, _store)) {
-            dynamics.push(_storeDeps(dep.name, dep.url));
-         }
-      });
-      new BasicDeferred().when.apply(null, dynamics)
-         .then(function() {
-            var toSend = [];
-            deps.forEach(function(name) {
-               toSend.push(_store[name]);
-            });
-            if(cb) cb.apply(null, toSend);
-         })
-         .fail(function(e) {
-            console.log(e);
+      if(!utils.isEmptyArray(deps)) {
+         var orderedDeps = new DependencyManager(deps, _config);
+         orderedDeps.forEach(function(dep) {
+            if(!utils.inObject(dep.name, _store)) {
+               dynamics.push(_storeDeps(dep.name, dep.url));
+            }
          });
+         new BasicDeferred().when.apply(null, dynamics)
+            .then(function() {
+               var toSend = [];
+               deps.forEach(function(name) {
+                  toSend.push(_store[name]);
+               });
+               if(cb) cb.apply(null, toSend);
+            })
+            .fail(function(e) {
+               console.log(e);
+            });
+      } else {
+         cb();
+      }
    };
 
    req.setConfig = function(config) {
