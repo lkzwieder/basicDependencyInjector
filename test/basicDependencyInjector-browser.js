@@ -210,13 +210,32 @@ var $req;
    $req = function(deps, cb) {
       var _createScript = function() {
          var script = d.createElement('script');
-         script.type = 'text/javascript'; // TODO if HTML?
+         script.type = 'text/javascript';
          script.charset = 'utf-8';
          script.async = true;
          return script;
       };
 
-      var _storeDeps = function(name, url) {
+      var _storeText = function(name, url) {
+         var deferred = new BasicDeferred();
+         var request = new XMLHttpRequest();
+         if(url.indexOf('!') === 0) url = url.substring(1, url.length);
+         request.onreadystatechange = function() {
+            if(request.readyState == 4 && request.status == 200) {
+               if(!_store[name]) {
+                  _store[name] = request.responseText;
+               }
+               deferred.resolve();
+            } else if(request.readyState == 4 && request.status != 200) {
+               deferred.reject("Error: " + url + " could not be loaded");
+            }
+         };
+         request.open("GET", url, true );
+         request.send(null);
+         return deferred.promise();
+      };
+
+      var _storeScript = function(name, url) {
          var deferred = new BasicDeferred();
          var script = _createScript();
          script.src = url;
@@ -239,6 +258,10 @@ var $req;
          });
          d.getElementsByTagName('head')[0].appendChild(script);
          return deferred.promise();
+      };
+
+      var _storeDeps = function(name, url) {
+         return name.indexOf('!') === 0 ? _storeText(name, url) : _storeScript(name, url);
       };
 
       var _windowDiffStore = function(old, current, name) {
