@@ -21,7 +21,7 @@ a callback. This callback would be executed right after the load scripts step an
 same order of the dependencies array.
 
 
-######Example
+###### Example
 
 *index.html*
 ```
@@ -57,9 +57,10 @@ req([
    App();
 });
 ```
+We use `req` to require the app.
 
 This would load the initial script in which we set configs
-and start our app. This script MUST be a req call.
+and start our app.
 
 *app.js
 ```
@@ -73,10 +74,9 @@ var Module = def([
 
 ```
 
-This app module and all modules from this point are libraries or def calls.
-Here we inject jquery, underscore and someText and we can work our module in an isolated environment. If we look closer
-we can note that to load text, we simple add ! at the beginning of the dependency, no matter if is html, txt or whatever.
+We use `def` to define modules.
+Here we inject jquery, underscore and someText. If we look closer we can note that to load text, we simple add ! at the 
+beginning of the dependency, no matter if is html, txt or whatever.
 
-Notice too that we save our to a variable, you can pick the name you want but I prefer to declare a significant name like 
-loginBox or something that can describe what is the module. The injector need that name to work, but you don't. So it is
+Notice too that we save our definition to a variable. The injector need that name to work, but you don't. So it is
 the same if you name your module HDJHDFGHG or myModule.
