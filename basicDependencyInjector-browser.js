@@ -1,4 +1,4 @@
-var $req;
+var req, def;
 (function(d, w) {
    var _config = {};
    var _store = {};
@@ -207,7 +207,7 @@ var $req;
       };
    };
 
-   $req = function(deps, cb) {
+   req = function(deps, cb) {
       var _createScript = function() {
          var script = d.createElement('script');
          script.type = 'text/javascript';
@@ -247,8 +247,8 @@ var $req;
                names.forEach(function(n) {
                   delete w[n];
                });
-               deferred.resolve();
             }
+            deferred.resolve();
             node.parentNode.removeChild(node);
          });
          script.addEventListener('error', function(e) {
@@ -289,15 +289,21 @@ var $req;
             deps.forEach(function(name) {
                toSend.push(_store[name]);
             });
-            if(cb) cb.apply(this, toSend);
+            if(cb) cb.apply(null, toSend);
          })
          .fail(function(e) {
             console.log(e);
          });
    };
 
-   $req.setConfig = function(config) {
+   req.setConfig = function(config) {
       _config = config;
+   };
+
+   def = function(deps, cb) {
+      return function() {
+         req(deps, cb);
+      };
    };
 
    var mains = d.getElementsByTagName('script');
@@ -306,7 +312,7 @@ var $req;
    for(var i = len; i--;) {
       main = mains[i].getAttribute('data-main');
       if(main) {
-         $req([main]);
+         req([main]);
          break;
       }
    }
