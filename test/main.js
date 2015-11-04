@@ -1,4 +1,4 @@
-$req.setConfig({
+req.setConfig({
    jquery: {
       url: 'jquery-2.1.4.min.js'
    },
@@ -7,9 +7,8 @@ $req.setConfig({
       deps: ['jquery']
    }
 });
-$req([
-   'underscore',
-   'jquery'
-], function(_, $) {
-   console.log(_, $);
+req([
+   'app.js'
+], function(App) {
+   App();
 });
